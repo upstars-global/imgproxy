@@ -7,15 +7,13 @@
 package imagemeta
 
 import (
-	"errors"
 	"io"
 
+	"github.com/imgproxy/imgproxy/v3/imagetype"
 	"golang.org/x/image/riff"
 	"golang.org/x/image/vp8"
 	"golang.org/x/image/vp8l"
 )
-
-var ErrWebpInvalidFormat = errors.New("webp: invalid format")
 
 var (
 	webpFccALPH = riff.FourCC{'A', 'L', 'P', 'H'}
@@ -31,7 +29,7 @@ func DecodeWebpMeta(r io.Reader) (Meta, error) {
 		return nil, err
 	}
 	if formType != webpFccWEBP {
-		return nil, ErrWebpInvalidFormat
+		return nil, newFormatError("WEBP", "invalid form type")
 	}
 
 	var buf [10]byte
@@ -39,7 +37,7 @@ func DecodeWebpMeta(r io.Reader) (Meta, error) {
 	for {
 		chunkID, chunkLen, chunkData, err := riffReader.Next()
 		if err == io.EOF {
-			err = ErrWebpInvalidFormat
+			err = newFormatError("WEBP", "no VP8, VP8L or VP8X chunk found")
 		}
 		if err != nil {
 			return nil, err
@@ -50,7 +48,7 @@ func DecodeWebpMeta(r io.Reader) (Meta, error) {
 			// Ignore
 		case webpFccVP8:
 			if int32(chunkLen) < 0 {
-				return nil, ErrWebpInvalidFormat
+				return nil, newFormatError("WEBP", "invalid chunk length")
 			}
 
 			d := vp8.NewDecoder()
@@ -59,7 +57,7 @@ func DecodeWebpMeta(r io.Reader) (Meta, error) {
 			fh, err := d.DecodeFrameHeader()
 
 			return &meta{
-				format: "webp",
+				format: imagetype.WEBP,
 				width:  fh.Width,
 				height: fh.Height,
 			}, err
@@ -71,14 +69,14 @@ func DecodeWebpMeta(r io.Reader) (Meta, error) {
 			}
 
 			return &meta{
-				format: "webp",
+				format: imagetype.WEBP,
 				width:  conf.Width,
 				height: conf.Height,
 			}, nil
 
 		case webpFccVP8X:
 			if chunkLen != 10 {
-				return nil, ErrWebpInvalidFormat
+				return nil, newFormatError("WEBP", "invalid chunk length")
 			}
 
 			if _, err := io.ReadFull(chunkData, buf[:10]); err != nil {
@@ -89,13 +87,13 @@ func DecodeWebpMeta(r io.Reader) (Meta, error) {
 			heightMinusOne := uint32(buf[7]) | uint32(buf[8])<<8 | uint32(buf[9])<<16
 
 			return &meta{
-				format: "webp",
+				format: imagetype.WEBP,
 				width:  int(widthMinusOne) + 1,
 				height: int(heightMinusOne) + 1,
 			}, nil
 
 		default:
-			return nil, ErrWebpInvalidFormat
+			return nil, newFormatError("WEBP", "unknown chunk")
 		}
 	}
 }
