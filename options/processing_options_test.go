@@ -423,10 +423,10 @@ func (s *ProcessingOptionsTestSuite) TestParsePathAdvancedURLWatermark() {
 	s.Require().NoError(err)
 
 	s.Require().True(po.URLWatermarks[0].Enabled)
-	s.Require().Equal(GravitySouthEast, po.URLWatermarks[0].WatermarkOptions.Position.Type)
+	s.Require().Equal(GravitySouthEast, po.URLWatermarks[0].Position.Type)
 	s.Require().Equal("https://i.stack.imgur.com/59ND2.png", po.URLWatermarks[0].ImageURL)
-	s.Require().Equal(10.0, po.URLWatermarks[0].WatermarkOptions.Position.X)
-	s.Require().Equal(20.0, po.URLWatermarks[0].WatermarkOptions.Position.Y)
+	s.Require().Equal(10.0, po.URLWatermarks[0].Position.X)
+	s.Require().Equal(20.0, po.URLWatermarks[0].Position.Y)
 	s.Require().Equal(0.6, po.URLWatermarks[0].Scale)
 }
 
