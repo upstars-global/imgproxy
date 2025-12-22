@@ -9,8 +9,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	"github.com/imgproxy/imgproxy/v3/config"
@@ -422,14 +420,14 @@ func (s *ProcessingOptionsTestSuite) TestParsePathAdvancedURLWatermark() {
 	path := "/url_watermark:https%3A%2F%2Fi.stack.imgur.com%2F59ND2.png:0.5:soea:10:20:0.6/plain/http://images.dev/lorem/ipsum.jpg"
 	po, _, err := ParsePath(path, make(http.Header))
 
-	require.Nil(s.T(), err)
+	s.Require().NoError(err)
 
-	assert.True(s.T(), po.URLWatermarks[0].Enabled)
-	assert.Equal(s.T(), GravitySouthEast, po.URLWatermarks[0].WatermarkOptions.Position.Type)
-	assert.Equal(s.T(), "https://i.stack.imgur.com/59ND2.png", po.URLWatermarks[0].ImageURL)
-	assert.Equal(s.T(), 10.0, po.URLWatermarks[0].WatermarkOptions.Position.X)
-	assert.Equal(s.T(), 20.0, po.URLWatermarks[0].WatermarkOptions.Position.Y)
-	assert.Equal(s.T(), 0.6, po.URLWatermarks[0].Scale)
+	s.Require().True(po.URLWatermarks[0].Enabled)
+	s.Require().Equal(GravitySouthEast, po.URLWatermarks[0].WatermarkOptions.Position.Type)
+	s.Require().Equal("https://i.stack.imgur.com/59ND2.png", po.URLWatermarks[0].ImageURL)
+	s.Require().Equal(10.0, po.URLWatermarks[0].WatermarkOptions.Position.X)
+	s.Require().Equal(20.0, po.URLWatermarks[0].WatermarkOptions.Position.Y)
+	s.Require().Equal(0.6, po.URLWatermarks[0].Scale)
 }
 
 func (s *ProcessingOptionsTestSuite) TestParsePathPreset() {

@@ -795,9 +795,9 @@ func applyURLWatermarkOption(po *ProcessingOptions, args []string) error {
 
 	if len(args) > 2 && len(args[2]) > 0 {
 		if args[1] == "re" {
-			wm.WatermarkOptions.Position.Type = GravityReplicate
+			wm.Position.Type = GravityReplicate
 		} else if g, ok := gravityTypes[args[2]]; ok && g != GravityFocusPoint && g != GravitySmart {
-			wm.WatermarkOptions.Position.Type = g
+			wm.Position.Type = g
 		} else {
 			return newOptionArgumentError("Invalid url watermark position: %s", args[1])
 		}
@@ -805,7 +805,7 @@ func applyURLWatermarkOption(po *ProcessingOptions, args []string) error {
 
 	if len(args) > 3 && len(args[3]) > 0 {
 		if x, err := strconv.Atoi(args[3]); err == nil {
-			wm.WatermarkOptions.Position.X = float64(x)
+			wm.Position.X = float64(x)
 		} else {
 			return newOptionArgumentError("Invalid url watermark X offset: %s", args[2])
 		}
@@ -813,7 +813,7 @@ func applyURLWatermarkOption(po *ProcessingOptions, args []string) error {
 
 	if len(args) > 4 && len(args[4]) > 0 {
 		if y, err := strconv.Atoi(args[4]); err == nil {
-			wm.WatermarkOptions.Position.Y = float64(y)
+			wm.Position.Y = float64(y)
 		} else {
 			return newOptionArgumentError("Invalid url watermark Y offset: %s", args[3])
 		}
