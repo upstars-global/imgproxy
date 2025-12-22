@@ -1276,7 +1276,7 @@ func parsePathPresets(parts []string, headers http.Header) (*ProcessingOptions, 
 		return nil, "", err
 	}
 
-	url, extension, err := DecodeURL(urlParts)
+	decodedURL, extension, err := DecodeURL(urlParts)
 	if err != nil {
 		return nil, "", err
 	}
@@ -1287,7 +1287,7 @@ func parsePathPresets(parts []string, headers http.Header) (*ProcessingOptions, 
 		}
 	}
 
-	return po, url, nil
+	return po, decodedURL, nil
 }
 
 func ParsePath(path string, headers http.Header) (*ProcessingOptions, string, error) {
