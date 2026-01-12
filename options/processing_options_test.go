@@ -425,9 +425,9 @@ func (s *ProcessingOptionsTestSuite) TestParsePathAdvancedURLWatermark() {
 	s.Require().True(po.URLWatermarks[0].Enabled)
 	s.Require().Equal(GravitySouthEast, po.URLWatermarks[0].Position.Type)
 	s.Require().Equal("https://i.stack.imgur.com/59ND2.png", po.URLWatermarks[0].ImageURL)
-	s.Require().Equal(10.0, po.URLWatermarks[0].Position.X)
-	s.Require().Equal(20.0, po.URLWatermarks[0].Position.Y)
-	s.Require().Equal(0.6, po.URLWatermarks[0].Scale)
+	s.Require().InDelta(10.0, po.URLWatermarks[0].Position.X, 0.0001)
+	s.Require().InDelta(20.0, po.URLWatermarks[0].Position.Y, 0.0001)
+	s.Require().InDelta(0.6, po.URLWatermarks[0].Scale, 0.0001)
 }
 
 func (s *ProcessingOptionsTestSuite) TestParsePathPreset() {
